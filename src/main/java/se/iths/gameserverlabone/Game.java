@@ -1,5 +1,6 @@
 package se.iths.gameserverlabone;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -15,15 +16,17 @@ public class Game {
     ArrayList<String> lastGameGuesses = new ArrayList<>();
     Integer highScore;
 
+    User player;
+    @Autowired
+    UserService service;
+
     public User getPlayer() {
         return player;
     }
 
-    public void setPlayer(User player) {
-        this.player = player;
+    public void setPlayer(String player) {
+        this.player = service.setPlayer(player);
     }
-
-    User player;
 
     public Game() {
         newGame();
@@ -35,13 +38,11 @@ public class Game {
             int x = new Random().nextInt(0, 10);
             if (!answer.contains(x)) {
                 answer.add(x);
+                System.out.println(x);
             }
         }
     }
 
-    public String gameType(){
-        return "bc";
-    }
 
     public String guess(Guess g) {
         ArrayList<Integer> guess = new ArrayList<>();
@@ -85,11 +86,18 @@ public class Game {
         if (bullCount == 4) {
             int totalGuesses = previousGuesses.size();
             checkHighScore();
+            updateUserStats();
             newGame();
             return "Success! You got it in " + totalGuesses + " guesses.";
         } else {
             return result;
         }
+    }
+
+    private void updateUserStats() {
+        Score newScore = new Score (previousGuesses.size());
+        player.addScore(newScore);
+        service.updateUser(player);
     }
 
     void newGame() {

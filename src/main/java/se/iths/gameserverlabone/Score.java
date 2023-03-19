@@ -2,24 +2,29 @@ package se.iths.gameserverlabone;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Score {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue
     Long id;
     int points;
-
-
-
-
-
+    @ManyToOne
+    @Cascade(CascadeType.SAVE_UPDATE)
+    User user;
 
     public Score() {
     }
+    public Score(int points) {
+    this.points = points;
+    }
+
+
 
     public Long getId() {
         return id;

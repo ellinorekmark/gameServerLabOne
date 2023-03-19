@@ -15,8 +15,7 @@ public class GameController {
 
     @Autowired
     Game game;
-    @Autowired
-    UserService service;
+
 
 
     @GetMapping("/login")
@@ -25,11 +24,8 @@ public class GameController {
     }
     @PostMapping("/startgame")
     String logInAction(Model m, @RequestParam String username){
-        User player = service.setPlayer(username);
-        m.addAttribute("player", player);
+        game.setPlayer(username);
         m.addAttribute("guess", new Guess());
-
-        //m.addAttribute("outcome", game.guess(guess));
         m.addAttribute("pastGuesses", game.getPastGuesses());
 
         return "game";
