@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8" >
     <title>Title</title>
 </head>
 <body>
@@ -10,6 +10,11 @@
 
     </div>
     <div class="sidebar-right">
+
+        <p><strong>User Stats</strong></p>
+        <p><strong>Player High Score: </strong><span th:text="${playerHighScore}" /></p>
+        <p><strong>Player Average: </strong><span th:text="${playerAverage}" /></p>
+
 
 
     </div>
@@ -37,6 +42,32 @@
         </table>
     </div>
     <div class="sidebar-left">
+        <p><strong>Global Stats</strong></p>
+        <table>
+        <thead>
+        <tr>
+            <strong>High Score</strong> (best score)
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="g: ${globalScores}">
+            <td th:text="${g}"></td>
+
+        </tr>
+        </tbody>
+        </table>
+        <table>
+            <thead>
+            <tr>
+                <strong>High Score</strong> (best average)</thead>
+            <tbody>
+            </tr>
+            <tr th:each="a: ${globalAverage}">
+                <td th:text="${a}"></td>
+
+            </tr>
+            </tbody>
+        </table>
 
     </div>
 

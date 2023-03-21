@@ -14,10 +14,19 @@ public class Score {
     @GeneratedValue
     Long id;
     int points;
+/*
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @ManyToOne
     @Cascade(CascadeType.SAVE_UPDATE)
     User user;
-
+*/
     public Score() {
     }
     public Score(int points) {

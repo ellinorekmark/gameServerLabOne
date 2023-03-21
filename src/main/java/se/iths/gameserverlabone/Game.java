@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -14,7 +15,6 @@ public class Game {
     ArrayList<Integer> answer = new ArrayList<>();
     ArrayList<String> previousGuesses = new ArrayList<>();
     ArrayList<String> lastGameGuesses = new ArrayList<>();
-    Integer highScore;
 
     User player;
     @Autowired
@@ -85,7 +85,7 @@ public class Game {
 
         if (bullCount == 4) {
             int totalGuesses = previousGuesses.size();
-            checkHighScore();
+            //checkHighScore();
             updateUserStats();
             newGame();
             return "Success! You got it in " + totalGuesses + " guesses.";
@@ -95,9 +95,11 @@ public class Game {
     }
 
     private void updateUserStats() {
-        Score newScore = new Score (previousGuesses.size());
+        Score newScore = new Score(previousGuesses.size());
+        //newScore.setUser(player);
         player.addScore(newScore);
-        service.updateUser(player);
+        player = service.updateUser(player);
+
     }
 
     void newGame() {
@@ -114,20 +116,19 @@ public class Game {
             return previousGuesses;
         }
     }
-    void checkHighScore(){
-        if ( highScore == null){
-            highScore = previousGuesses.size();
-        }
-        else if(previousGuesses.size()<highScore){
-            highScore = previousGuesses.size();
-        }
+
+    String localHighscore(){
+        return player.getPlayerHighScore();
     }
-    public String getHighScore(){
-        if (highScore == null){
-            return "-";
-        }
-        else{
-            return highScore.toString();
-        }
+    String averageScore(){
+        return player.getPlayerAverage();
+    }
+
+    List<String> globalScore(){
+        return service.getGlobalHighScore();
+    }
+
+    public List<PlayerAverage> globalAverage() {
+        return service.getGlobalAverage();
     }
 }

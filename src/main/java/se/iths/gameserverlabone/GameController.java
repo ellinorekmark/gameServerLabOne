@@ -10,14 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GameController {
-
-
-
     @Autowired
     Game game;
-
-
-
     @GetMapping("/login")
     String loginPage(Model m){
         return "loginpage";
@@ -27,6 +21,10 @@ public class GameController {
         game.setPlayer(username);
         m.addAttribute("guess", new Guess());
         m.addAttribute("pastGuesses", game.getPastGuesses());
+        m.addAttribute("playerHighScore", game.localHighscore());
+        m.addAttribute("playerAverage", game.averageScore());
+        m.addAttribute("globalScores", game.globalScore());
+        m.addAttribute("globalAverage", game.globalAverage());
 
         return "game";
     }
@@ -37,6 +35,11 @@ public class GameController {
         m.addAttribute("player", game.getPlayer());
         m.addAttribute("outcome", game.guess(guess));
         m.addAttribute("pastGuesses", game.getPastGuesses());
+        m.addAttribute("user", game.getPlayer().getName());
+        m.addAttribute("playerHighScore", game.localHighscore());
+        m.addAttribute("playerAverage", game.averageScore());
+        m.addAttribute("globalScores", game.globalScore());
+        m.addAttribute("globalAverage", game.globalAverage());
 
         return "game";
     }
