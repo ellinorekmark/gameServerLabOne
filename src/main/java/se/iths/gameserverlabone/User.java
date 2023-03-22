@@ -48,46 +48,43 @@ public class User {
     }
 
     public void addScore(Score points) {
-        if(scores == null){
+        if (scores == null) {
             scores = new ArrayList<>();
             scores.add(points);
-        }
-        else {
+        } else {
             scores.add(points);
         }
     }
 
-        String getPlayerHighScore() {
+    String getPlayerHighScore() {
 
-            if (scores == null || scores.isEmpty()) {
-                return "No games played.";
-            }
-            else if(scores.size() == 1){
-                return ""+ scores.get(0).getPoints();
-            }
-            else {
-                Score highScore = scores.get(0);
-                for (int i = 0; i < scores.size(); i++) {
-                    if (highScore.getPoints()> scores.get(i).getPoints()){
-                        highScore = scores.get(i);
-                    }
+        if (scores == null || scores.isEmpty()) {
+            return "No games played.";
+        } else if (scores.size() == 1) {
+            return "" + scores.get(0).getPoints();
+        } else {
+            Score highScore = scores.get(0);
+            for (int i = 0; i < scores.size(); i++) {
+                if (highScore.getPoints() > scores.get(i).getPoints()) {
+                    highScore = scores.get(i);
                 }
+            }
 
-                return "" + highScore.getPoints();
+            return "" + highScore.getPoints();
 
-            }
         }
-        String getPlayerAverage(){
-            if (scores == null || scores.isEmpty()){
-                return "No games played.";
+    }
+
+    String getPlayerAverage() {
+        if (scores == null || scores.isEmpty()) {
+            return "No games played.";
+        } else {
+            int total = 0;
+            for (Score score : scores) {
+                total += score.getPoints();
             }
-            else{
-                int total = 0;
-                for (Score score: scores) {
-                    total += score.getPoints();
-                }
-                int average = total/(scores.size());
-                return ""+average;
-            }
+            int average = total / (scores.size());
+            return "" + average;
         }
+    }
 }

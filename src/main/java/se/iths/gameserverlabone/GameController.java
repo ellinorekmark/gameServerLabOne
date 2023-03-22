@@ -12,15 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class GameController {
     @Autowired
     Game game;
-
     @GetMapping("/login")
-    String login(Model m){
+    String login(Model m) {
         m.addAttribute("users", game.allUsers());
         return "loginpage";
     }
 
     @PostMapping("/olduser")
-    String logOldUser(Model m, @RequestParam User userSelect){
+    String logOldUser(Model m, @RequestParam User userSelect) {
         m.addAttribute("guess", new Guess());
         game.loginPlayer(userSelect);
         m.addAttribute("game", game);
@@ -29,7 +28,7 @@ public class GameController {
     }
 
     @PostMapping("/newuser")
-    String logInAction(Model m, @RequestParam String username){
+    String logInAction(Model m, @RequestParam String username) {
 
         try {
             game.newPlayer(username);
@@ -47,7 +46,7 @@ public class GameController {
     }
 
     @PostMapping("/game")
-    String playGame(Model m, @ModelAttribute("guess") Guess guess){
+    String playGame(Model m, @ModelAttribute("guess") Guess guess) {
         m.addAttribute("outcome", game.guess(guess));
         m.addAttribute("game", game);
 

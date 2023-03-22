@@ -3,6 +3,7 @@ package se.iths.gameserverlabone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +25,7 @@ public class Game {
         return player;
     }
 
-    public void newPlayer(String player) throws Exception{
+    public void newPlayer(String player) throws Exception {
         globalHighScores = service.getGlobalHighScore();
         globalAverages = service.getGlobalAverage();
 
@@ -34,7 +35,8 @@ public class Game {
             throw new RuntimeException(e);
         }
     }
-    public void loginPlayer(User user){
+
+    public void loginPlayer(User user) {
         globalHighScores = service.getGlobalHighScore();
         globalAverages = service.getGlobalAverage();
         player = user;
@@ -98,7 +100,7 @@ public class Game {
             newGame();
             return "Success! You got it in " + totalGuesses + " guesses.";
         } else {
-            return "Bulls: "+bullCount+" Cows: "+ cowCount;
+            return "Bulls: " + bullCount + " Cows: " + cowCount;
         }
     }
 
@@ -118,21 +120,22 @@ public class Game {
     }
 
     public ArrayList<GuessResult> getPastGuesses() {
-            ArrayList<GuessResult> reverse = new ArrayList<>();
-            for (int i = previousGuesses.size()-1; i >= 0; i--) {
-                reverse.add(previousGuesses.get(i));
-            }
-            return reverse;
+        ArrayList<GuessResult> reverse = new ArrayList<>();
+        for (int i = previousGuesses.size() - 1; i >= 0; i--) {
+            reverse.add(previousGuesses.get(i));
+        }
+        return reverse;
     }
 
-    public String localHighScore(){
+    public String localHighScore() {
         return player.getPlayerHighScore();
     }
-    public String averageScore(){
+
+    public String averageScore() {
         return player.getPlayerAverage();
     }
 
-    public List<PlayerPoints> globalScore(){
+    public List<PlayerPoints> globalScore() {
         return globalHighScores;
     }
 

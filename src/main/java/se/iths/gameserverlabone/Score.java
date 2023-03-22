@@ -13,13 +13,15 @@ public class Score {
     int points;
     public Score() {
     }
+
     public Score(int points) {
-    this.points = points;
+        this.points = points;
     }
 
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -27,6 +29,7 @@ public class Score {
     public int getPoints() {
         return points;
     }
+
     public void setPoints(int points) {
         this.points = points;
     }

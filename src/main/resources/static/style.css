@@ -6,18 +6,22 @@ body {
 strong {
     color: darkslateblue;
 }
+
 input {
     padding: 2px;
     font-size: large;
 }
+
 select {
     font-size: large;
 }
+
 h2 {
     color: darkslateblue;
     font-family: "Ink Free";
     font-size: larger;
 }
+
 h1 {
     font-family: "Ink Free";
 }
@@ -26,6 +30,7 @@ h1 {
 .wrapper {
     margin-left: 10px;
 }
+
 .header {
     color: darkslateblue;
     height: 100px;
@@ -42,12 +47,14 @@ h1 {
 
 
 }
+
 .center {
     width: 200px;
     margin-left: auto;
     margin-right: auto;
 }
-.sidebar-right{
+
+.sidebar-right {
     padding: 10px;
     width: 200px;
     float: left;
