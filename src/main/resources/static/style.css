@@ -1,0 +1,61 @@
+body {
+    font-family: Calibri, serif;
+    font-size: large;
+}
+
+strong {
+    color: darkslateblue;
+}
+input {
+    padding: 2px;
+    font-size: large;
+}
+select {
+    font-size: large;
+}
+h2 {
+    color: darkslateblue;
+    font-family: "Ink Free";
+    font-size: larger;
+}
+h1 {
+    font-family: "Ink Free";
+}
+
+
+.wrapper {
+    margin-left: 10px;
+}
+.header {
+    color: darkslateblue;
+    height: 100px;
+    padding: 10px 10px 10px 25px;
+
+}
+
+.main {
+    padding: 5px;
+    float: left;
+    width: 400px;
+    height: 400px;
+    text-align: center;
+
+
+}
+.center {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.sidebar-right{
+    padding: 10px;
+    width: 200px;
+    float: left;
+    border-width: 1px;
+    border-style: double;
+    border-color: darkslateblue;
+}
+
+
+
+

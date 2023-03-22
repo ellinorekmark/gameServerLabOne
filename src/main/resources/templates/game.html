@@ -1,74 +1,83 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" >
-    <title>Title</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Bulls and Cows</title>
 </head>
 <body>
 <div class="wrapper">
     <div class="header">
-
+        <h1>Bulls and Cows</h1>
     </div>
     <div class="sidebar-right">
+        <div class="localstats">
 
-        <p><strong>User Stats</strong></p>
-        <p><strong>Player High Score: </strong><span th:text="${playerHighScore}" /></p>
-        <p><strong>Player Average: </strong><span th:text="${playerAverage}" /></p>
-
+            <p><h2>User Stats</h2></p>
 
 
+            <p><strong>Player High Score: </strong><span th:text="${game.localHighScore()}"/></p>
+            <p><strong>Player Average: </strong><span th:text="${game.averageScore()}"/></p>
+        </div>
+        <hr/>
+        <div class="globalstats">
+
+            <p><h2>Global Stats</h2></p>
+
+            <table>
+                <thead>
+                <tr>
+                    <td><strong>High Score</strong> (best score)</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="g: ${game.globalScore()}">
+                    <td><strong th:text="${g.user}"/> - <span th:text="${g.points}"/></td>
+
+                </tr>
+                </tbody>
+            </table>
+            <br/><br/>
+            <table>
+                <thead>
+                <tr>
+                    <td><strong>High Score</strong> (best average)
+                </thead>
+                </td>
+                <tbody>
+                </tr>
+                <tr th:each="a : ${game.globalAverage()}">
+                    <td><strong th:text="${a.user}"/> - <span th:text="${a.points}"/></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
     </div>
     <div class="main">
+        <p th:text="${outcome} ?: 'Let\'s play!'"></p>
         <form th:action="@{/game}" th:object="${guess}" method="post">
-            <input type="text" th:field="*{a}" size="8" name="a" value="0"/>
-            <input type="text" th:field="*{b}" size="8" name="b" value="0"/>
-            <input type="text" th:field="*{c}" size="8" name="c" value="0"/>
-            <input type="text" th:field="*{d}" size="8" name="d" value="0"/><br/>
+            <input type="text" th:field="*{a}" size="2" name="a" value="0"/>
+            <input type="text" th:field="*{b}" size="2" name="b" value="0"/>
+            <input type="text" th:field="*{c}" size="2" name="c" value="0"/>
+            <input type="text" th:field="*{d}" size="2" name="d" value="0"/><br/><br/>
             <input type="submit" value="Guess!"/>
         </form>
-        <table>
+        <table class="center">
             <thead>
             <tr>
                 <th>
-                    <Strong>Previous guesses:</strong>
+                    <h2>Previous guesses:</h2>
                 </th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="g: ${pastGuesses}">
-                <td th:text="${g}"></td>
+            <tr th:each="g: ${game.getPastGuesses()}">
+                <td><span th:text="${g.getGuess()}"/> - <strong>Bulls:</strong> <span th:text="${g.getBulls()}"/>
+                    <strong>Cows:</strong> <span th:text="${g.getCows()}"/></td>
             </tr>
             </tbody>
         </table>
-    </div>
-    <div class="sidebar-left">
-        <p><strong>Global Stats</strong></p>
-        <table>
-        <thead>
-        <tr>
-            <strong>High Score</strong> (best score)
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="g: ${globalScores}">
-            <td th:text="${g}"></td>
-
-        </tr>
-        </tbody>
-        </table>
-        <table>
-            <thead>
-            <tr>
-                <strong>High Score</strong> (best average)</thead>
-            <tbody>
-            </tr>
-            <tr th:each="a: ${globalAverage}">
-                <td th:text="${a}"></td>
-
-            </tr>
-            </tbody>
-        </table>
-
     </div>
 
 </div>

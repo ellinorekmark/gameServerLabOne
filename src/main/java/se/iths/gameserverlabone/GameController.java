@@ -12,40 +12,45 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class GameController {
     @Autowired
     Game game;
+
     @GetMapping("/login")
-    String loginPage(Model m){
+    String login(Model m){
+        m.addAttribute("users", game.allUsers());
         return "loginpage";
     }
-    @PostMapping("/startgame")
-    String logInAction(Model m, @RequestParam String username){
-        game.setPlayer(username);
+
+    @PostMapping("/olduser")
+    String logOldUser(Model m, @RequestParam User userSelect){
         m.addAttribute("guess", new Guess());
-        m.addAttribute("pastGuesses", game.getPastGuesses());
-        m.addAttribute("playerHighScore", game.localHighscore());
-        m.addAttribute("playerAverage", game.averageScore());
-        m.addAttribute("globalScores", game.globalScore());
-        m.addAttribute("globalAverage", game.globalAverage());
+        game.loginPlayer(userSelect);
+        m.addAttribute("game", game);
+
+        return "game";
+    }
+
+    @PostMapping("/newuser")
+    String logInAction(Model m, @RequestParam String username){
+
+        try {
+            game.newPlayer(username);
+        } catch (Exception e) {
+            m.addAttribute("message", "Username already exists.");
+            m.addAttribute("users", game.allUsers());
+            return "loginpage";
+        }
+        m.addAttribute("outcome", "");
+        m.addAttribute("game", game);
+        m.addAttribute("guess", new Guess());
+
 
         return "game";
     }
 
     @PostMapping("/game")
     String playGame(Model m, @ModelAttribute("guess") Guess guess){
-
-        m.addAttribute("player", game.getPlayer());
         m.addAttribute("outcome", game.guess(guess));
-        m.addAttribute("pastGuesses", game.getPastGuesses());
-        m.addAttribute("user", game.getPlayer().getName());
-        m.addAttribute("playerHighScore", game.localHighscore());
-        m.addAttribute("playerAverage", game.averageScore());
-        m.addAttribute("globalScores", game.globalScore());
-        m.addAttribute("globalAverage", game.globalAverage());
+        m.addAttribute("game", game);
 
         return "game";
     }
-
-
-
-
-
 }

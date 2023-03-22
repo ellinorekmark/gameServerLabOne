@@ -3,7 +3,6 @@ package se.iths.gameserverlabone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,9 +11,10 @@ import java.util.Random;
 @SessionScope
 public class Game {
 
-    ArrayList<Integer> answer = new ArrayList<>();
-    ArrayList<String> previousGuesses = new ArrayList<>();
-    ArrayList<String> lastGameGuesses = new ArrayList<>();
+    private ArrayList<Integer> answer = new ArrayList<>();
+    private ArrayList<GuessResult> previousGuesses = new ArrayList<>();
+    private List<PlayerPoints> globalHighScores;
+    private List<PlayerPoints> globalAverages;
 
     User player;
     @Autowired
@@ -24,13 +24,24 @@ public class Game {
         return player;
     }
 
-    public void setPlayer(String player) {
-        this.player = service.setPlayer(player);
+    public void newPlayer(String player) throws Exception{
+        globalHighScores = service.getGlobalHighScore();
+        globalAverages = service.getGlobalAverage();
+
+        try {
+            this.player = service.setPlayer(player);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void loginPlayer(User user){
+        globalHighScores = service.getGlobalHighScore();
+        globalAverages = service.getGlobalAverage();
+        player = user;
     }
 
     public Game() {
         newGame();
-
     }
 
     private void generateAnswers() {
@@ -64,7 +75,6 @@ public class Game {
             }
         }
 
-
         int bullCount = 0;
         int cowCount = 0;
         StringBuilder guesses = new StringBuilder();
@@ -79,56 +89,58 @@ public class Game {
                 }
             }
         }
-        String result = " B: " + bullCount + "  C: " + cowCount;
-        guesses.append(result);
-        previousGuesses.add(guesses.toString());
+
+        previousGuesses.add(new GuessResult(guesses.toString(), bullCount, cowCount));
 
         if (bullCount == 4) {
             int totalGuesses = previousGuesses.size();
-            //checkHighScore();
             updateUserStats();
             newGame();
             return "Success! You got it in " + totalGuesses + " guesses.";
         } else {
-            return result;
+            return "Bulls: "+bullCount+" Cows: "+ cowCount;
         }
     }
 
     private void updateUserStats() {
         Score newScore = new Score(previousGuesses.size());
-        //newScore.setUser(player);
         player.addScore(newScore);
         player = service.updateUser(player);
+        globalHighScores = service.getGlobalHighScore();
+        globalAverages = service.getGlobalAverage();
 
     }
 
     void newGame() {
         answer.clear();
-        lastGameGuesses = previousGuesses;
         previousGuesses.clear();
         generateAnswers();
     }
 
-    public ArrayList<String> getPastGuesses() {
-        if (previousGuesses.isEmpty()) {
-            return lastGameGuesses;
-        } else {
-            return previousGuesses;
-        }
+    public ArrayList<GuessResult> getPastGuesses() {
+            ArrayList<GuessResult> reverse = new ArrayList<>();
+            for (int i = previousGuesses.size()-1; i >= 0; i--) {
+                reverse.add(previousGuesses.get(i));
+            }
+            return reverse;
     }
 
-    String localHighscore(){
+    public String localHighScore(){
         return player.getPlayerHighScore();
     }
-    String averageScore(){
+    public String averageScore(){
         return player.getPlayerAverage();
     }
 
-    List<String> globalScore(){
-        return service.getGlobalHighScore();
+    public List<PlayerPoints> globalScore(){
+        return globalHighScores;
     }
 
-    public List<PlayerAverage> globalAverage() {
-        return service.getGlobalAverage();
+    public List<PlayerPoints> globalAverage() {
+        return globalAverages;
+    }
+
+    public List<User> allUsers() {
+        return service.getAll();
     }
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Title</title>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <h1>Bulls and Cows</h1>
+  </div>
+  <div class="sidebar-right" style="border: none">
+
+  </div>
+  <div class="main">
+
+    <p>Log in existing user:</p>
+    <br />
+    <form action="/olduser" method="post" name="user">
+    <select  name="userSelect" id="username">
+      <option value="">--Select User--</option>
+      <option th:each="u: ${users}" th:value="${u.getId()}" th:text="${u.name}" >
+    </select>
+      <input type="submit" value="Login">
+    </form>
+    <br /><br />
+    <p>New user: </p><br />
+    <form action="/newuser" method="post">
+      <input type="text" value="" name="username"> <span th:text ="${message}"></span><br />
+      <input type="submit" value="Login">
+    </form>
+  </div>
+
+
+</div>
+
+
+</body>
+</html>

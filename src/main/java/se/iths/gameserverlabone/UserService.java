@@ -1,9 +1,7 @@
 package se.iths.gameserverlabone;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.*;
 
@@ -12,52 +10,59 @@ public class UserService {
     @Autowired
     UserRepository rep;
 
-
-    public User setPlayer(String username) {
+    public User setPlayer(String username) throws Exception {
         User player;
-        List<User> users = rep.findByName(username);
-        if (users.size() > 0) {
-            player = users.get(0);
-
-        } else {
+        if(rep.existsByName(username)){
+            throw new Exception("User already exists");
+        }
+        else {
             player = rep.save(new User(username));
         }
         return player;
     }
+
+
 
     public User updateUser(User user) {
         return (rep.save(user));
     }
 
 
-    ArrayList<String> getGlobalHighScore() {
-        ArrayList<String> highScores = new ArrayList<>();
+    ArrayList<PlayerPoints> getGlobalHighScore() {
+        ArrayList<PlayerPoints> playerPoints = new ArrayList<>();
         List<User> all = rep.findAll();
 
         for (User u : all) {
             if(u.scores != null && u.scores.size() > 0) {
-                highScores.add(u.getName() + " - " + u.getPlayerHighScore());
+                playerPoints.add(new PlayerPoints(u.name, Double.parseDouble(u.getPlayerHighScore())));
             }
         }
-        return highScores;
+        playerPoints.sort(Comparator.comparingDouble(s -> s.points));
+        return playerPoints;
     }
 
-
-
-    public ArrayList<PlayerAverage> getGlobalAverage() {
-        ArrayList<String> highScores = new ArrayList<>();
+    public ArrayList<PlayerPoints> getGlobalAverage() {
         List<User> all = rep.findAll();
-        ArrayList<PlayerAverage> playerAverages = new ArrayList<>();
+        ArrayList<PlayerPoints> playerPoints = new ArrayList<>();
         for (User u : all) {
             if(u.scores != null && u.scores.size() > 0) {
-                playerAverages.add(new PlayerAverage(u.name, Double.parseDouble(u.getPlayerAverage())));
+                playerPoints.add(new PlayerPoints(u.name, Double.parseDouble(u.getPlayerAverage())));
             }
         }
+        playerPoints.sort(Comparator.comparingDouble(s -> s.points));
+        return playerPoints;
+    }
 
-        playerAverages.sort(Comparator.comparingDouble(s -> s.average));
+    public List<String> getAllUsernames() {
+        List<User> users = rep.findAll();
+        ArrayList<String> usernames = new ArrayList<>();
+        for (User u: users) {
+            usernames.add(u.getName());
+        }
+        return usernames;
+    }
 
-
-
-        return playerAverages;
+    public List<User> getAll() {
+        return rep.findAll();
     }
 }
